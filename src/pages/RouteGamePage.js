@@ -80,6 +80,7 @@ export default function RouteGamePage() {
 
   useEffect(() => {
     loadNewQuestion();
+    // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, []);
 
   const buttonStyle = {
