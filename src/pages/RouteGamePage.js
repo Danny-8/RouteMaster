@@ -13,6 +13,7 @@ export default function RouteGamePage() {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [buttonColor, setButtonColor] = useState(null);
   const [buttonsDisabled, setButtonsDisabled] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(true);
   const navigate = useNavigate();
 
   const loadRoutesData = async () => {
@@ -31,26 +32,30 @@ export default function RouteGamePage() {
   };
 
   const loadNewQuestion = async () => {
-    const routesData = await loadRoutesData();
-    const randomRoute = getRandomRoute(routesData);
-    const correctRoute = randomRoute.route;
-    setCurrentRoute(randomRoute);
-    setCorrectAnswer(correctRoute);
+    setIsTransitioning(true);
+    setTimeout(async () => {
+      const routesData = await loadRoutesData();
+      const randomRoute = getRandomRoute(routesData);
+      const correctRoute = randomRoute.route;
+      setCurrentRoute(randomRoute);
+      setCorrectAnswer(correctRoute);
 
-    const allRoutes = routesData.map((item) => item.route);
-    let options = [correctRoute];
+      const allRoutes = routesData.map((item) => item.route);
+      let options = [correctRoute];
 
-    while (options.length < 4) {
-      const randomRoute = allRoutes[Math.floor(Math.random() * allRoutes.length)];
-      if (!options.includes(randomRoute)) {
-        options.push(randomRoute);
+      while (options.length < 4) {
+        const randomRoute = allRoutes[Math.floor(Math.random() * allRoutes.length)];
+        if (!options.includes(randomRoute)) {
+          options.push(randomRoute);
+        }
       }
-    }
 
-    options = options.sort(() => Math.random() - 0.5);
-    setOptions(options);
-    setSelectedAnswer(null);
-    setButtonsDisabled(false);
+      options = options.sort(() => Math.random() - 0.5);
+      setOptions(options);
+      setSelectedAnswer(null);
+      setButtonsDisabled(false);
+      setIsTransitioning(false);
+    } , 500);
   };
 
   const handleAnswer = (selectedRoute) => {
@@ -97,51 +102,59 @@ export default function RouteGamePage() {
   };
 
   return (
-    <div style={{ padding: "20px", textAlign: "center", background: "#f4f6f9" }}>
-      <Title level={2} style={{ marginBottom: "40px", color: "#333" }}>
-        Adivina la Ruta
-      </Title>
-      <Text style={{ fontSize: "18px", color: "black", marginBottom: "20px" }}>
-        Puntaje: {score}
-      </Text>
+    <>
+      <div style={{ 
+        padding: "20px", 
+        textAlign: "center", 
+        background: "#f4f6f9",
+        opacity: isTransitioning ? 0 : 1,
+        transition: "opacity 0.5s ease",
+      }}>
+        <Title level={2} style={{ marginBottom: "40px", color: "#333" }}>
+          Adivina la Ruta
+        </Title>
+        <Text style={{ fontSize: "18px", color: "black", marginBottom: "20px" }}>
+          Puntaje: {score}
+        </Text>
 
-      {currentRoute && (
-        <div style={{ marginTop: "20px" }}>
-          <img
-            src={`/routes/${currentRoute.image}`}
-            alt={currentRoute.route}
-            style={{
-              maxWidth: "100%",
-              height: "auto",
-              marginBottom: "60px",
-              borderRadius: "8px",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            }}
-          />
-          <div>
-            <Row justify="center" gutter={[16, 16]}>
-              {options.map((option, index) => (
-                <Col key={index} xs={12} sm={8} md={6} lg={6}>
-                  <Button
-                    type="primary"
-                    block
-                    disabled={buttonsDisabled}
-                    onClick={() => handleAnswer(option)}
-                    style={{
-                      ...buttonStyle,
-                      backgroundColor:
-                        buttonColor && selectedAnswer === option ? buttonColor : "black",
-                    }}
-                  >
-                    {option}
-                  </Button>
-                </Col>
-              ))}
-            </Row>
+        {currentRoute && (
+          <div style={{ marginTop: "20px" }}>
+            <img
+              src={`/routes/${currentRoute.image}`}
+              alt={currentRoute.route}
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+                marginBottom: "60px",
+                borderRadius: "8px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              }}
+            />
+            <div>
+              <Row justify="center" gutter={[16, 16]}>
+                {options.map((option, index) => (
+                  <Col key={index} xs={12} sm={8} md={6} lg={6}>
+                    <Button
+                      type="primary"
+                      block
+                      disabled={buttonsDisabled}
+                      onClick={() => handleAnswer(option)}
+                      style={{
+                        ...buttonStyle,
+                        backgroundColor:
+                          buttonColor && selectedAnswer === option ? buttonColor : "black",
+                      }}
+                    >
+                      {option}
+                    </Button>
+                  </Col>
+                ))}
+              </Row>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
+      </div>
       <div style={{ marginTop: "20px" }}>
         <Button
           type="default"
@@ -162,6 +175,6 @@ export default function RouteGamePage() {
           Volver
         </Button>
       </div>
-    </div>
+    </>
   );
 }
