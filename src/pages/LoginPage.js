@@ -50,6 +50,7 @@ export default function LoginPage() {
           boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
         }}
       >
+        <img src={`${process.env.PUBLIC_URL}/icons/route66.svg`} alt="icon" style={{ width: "10vh", objectFit: "contain" }} />
         <Title level={2} style={{ marginBottom: "24px", color: "#333" }}>
           Iniciar sesión
         </Title>

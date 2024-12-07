@@ -32,7 +32,7 @@ export default function Layout({ children }) {
                             textAlign: "center",
                         }}
                     >
-                        🏈RouteMaster🏈
+                        🏈RouteMaster66🏈
                     </Text>
                 </Row>
             </Header>
@@ -60,7 +60,7 @@ export default function Layout({ children }) {
                     marginTop: "auto",
                 }}
             >
-                RouteMaster ©{new Date().getFullYear()} Created by Daniel Suárez
+                RouteMaster66 ©{new Date().getFullYear()} Created by Daniel Suárez
             </Footer>
         </BaseLayout>
     );
