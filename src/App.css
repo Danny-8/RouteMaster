@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+
+
+.custom-menu .ant-menu-item {
+  color: white !important;
+}
+
+.custom-menu .ant-menu-item:hover {
+  color: white !important;
+}
+
+.custom-menu .ant-menu-item-selected {
+  color: white !important;
+  border-bottom-color: white !important;
+}
+
+.custom-menu .ant-menu-item-selected::after {
+  border-bottom-color: white !important;
+}
+
+.custom-menu .ant-menu-item:hover::after {
+  border-bottom: 2px solid white !important;
+}
+
+

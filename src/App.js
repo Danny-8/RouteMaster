@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import Layout from "./pages/Layout";
+import HomePage from "./pages/HomePage";
+import RouteGamePage from "./pages/RouteGamePage";
+import LoginPage from "./pages/LoginPage";
+
+const ProtectedRoute = ({ element }) => {
+  const isAuthenticated = localStorage.getItem("authenticated") === "true";
+  return isAuthenticated ? element : <Navigate to="/login" replace />;
+};
 
 function App() {
+  useEffect(() => {
+    localStorage.removeItem("authenticated");
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/"
+          element={<ProtectedRoute element={<Layout><HomePage /></Layout>} />}
+        />
+        <Route
+          path="/route-game"
+          element={<ProtectedRoute element={<Layout><RouteGamePage /></Layout>} />}
+        />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
   );
 }
 
